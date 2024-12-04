@@ -1,29 +1,15 @@
 package advent
 
-enum Dir derives CanEqual:
-  case Up
-  case Down
-  case Left
-  case Right
-  case LeftUp
-  case LeftDown
-  case RightUp
-  case RightDown
-
-object Dir:
-  val all: List[Dir] =
-    List(Up, Down, Left, Right, LeftUp, LeftDown, RightUp, RightDown)
-
-  def toPositionModifier: Dir => (Int, Int) = {
-    case Up        => (-1, 0)
-    case Down      => (1, 0)
-    case Left      => (0, -1)
-    case Right     => (0, 1)
-    case LeftUp    => (-1, -1)
-    case LeftDown  => (1, -1)
-    case RightUp   => (-1, 1)
-    case RightDown => (1, 1)
-  }
+val directions = List(
+  (-1, 0),
+  (1, 0),
+  (0, -1),
+  (0, 1),
+  (-1, -1),
+  (1, -1),
+  (-1, 1),
+  (1, 1),
+)
 
 given day4part1Solution: Solver[4, 1] = new Solver[4, 1]:
   override def solve(input: Vector[String]): Int =
@@ -36,9 +22,8 @@ given day4part1Solution: Solver[4, 1] = new Solver[4, 1]:
 
       row >= 0 && row < height && col >= 0 && col < width
 
-    def getXmasses(position: (Int, Int)): List[Dir] =
-      Dir.all.filter { dir =>
-        val mod = Dir.toPositionModifier(dir)
+    def getXmasses(position: (Int, Int)): List[(Int, Int)] =
+      directions.filter { mod =>
         val mPos = (position._1 + mod._1, position._2 + mod._2)
         val aPos = (mPos._1 + mod._1, mPos._2 + mod._2)
         val sPos = (aPos._1 + mod._1, aPos._2 + mod._2)
