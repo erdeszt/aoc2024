@@ -1,6 +1,6 @@
 package advent
 
-class Day2Validator
+class Day2Test
     extends ExampleValidator[2](2, 4)(
       Vector(
         "7 6 4 2 1",

@@ -1,6 +1,6 @@
 package advent
 
-class Day5Validator
+class Day5Test
     extends ExampleValidator[5](
       143,
       123,
