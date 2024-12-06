@@ -2,7 +2,7 @@ package advent
 
 import org.scalatest.flatspec.AnyFlatSpec
 
-trait ExampleTest[Day <: Int: ValueOf](
+trait ExampleValidator[Day <: Int: ValueOf](
     part1Solution: Int,
     part2Solution: Int,
 )(examples: Vector[String] | (Vector[String], Vector[String]))(using

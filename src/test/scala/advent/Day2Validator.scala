@@ -1,9 +1,7 @@
 package advent
 
-import org.scalatest.flatspec.AnyFlatSpec
-
-class Day2Test
-    extends ExampleTest[2](2, 4)(
+class Day2Validator
+    extends ExampleValidator[2](2, 4)(
       Vector(
         "7 6 4 2 1",
         "1 2 7 8 9",

@@ -1,9 +1,7 @@
 package advent
 
-import org.scalatest.flatspec.AnyFlatSpec
-
-class Day5Test
-    extends ExampleTest[5](
+class Day5Validator
+    extends ExampleValidator[5](
       143,
       123,
     )(
