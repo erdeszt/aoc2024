@@ -10,22 +10,28 @@ trait ExampleValidator[Day <: Int: ValueOf](
     Solver[Day, 2],
 ) extends AnyFlatSpec:
 
-  s"Day ${valueOf[Day]}, Part 1" should "produce the correct result for the example" in {
-    val solution = summon[Solver[Day, 1]].solve(
-      examples match
-        case (part1Example, part2Example) => part1Example
-        case example: Vector[_]           => example,
-    )
+  private type Selector = ((Vector[String], Vector[String])) => Vector[String]
 
-    assert(solution == part1Solution)
+  private def validateExample[Part <: Int: ValueOf](using
+      Solver[Day, Part],
+  ): Unit = {
+    s"Day ${valueOf[Day]}, Part ${valueOf[Part]}" should "produce the correct result for the example" in {
+      val (selector, expectedResult): (Selector, Int) =
+        valueOf[Part] match
+          case 1 => ((_._1): Selector, part1Solution)
+          case 2 => ((_._2): Selector, part2Solution)
+          case _ => throw Exception(s"Invalid part number: ${valueOf[Part]}")
+
+      val solution = summon[Solver[Day, Part]].solve(
+        examples match
+          case tuple: (Vector[_], Vector[_]) => selector(tuple)
+          case vector: Vector[_]             => vector,
+      )
+
+      assert(solution == expectedResult)
+    }
+
   }
 
-  s"Day ${valueOf[Day]}, Part 2" should "produce the correct result for the example" in {
-    val solution = summon[Solver[Day, 2]].solve(
-      examples match
-        case (part1Example, part2Example) => part2Example
-        case example: Vector[_]           => example,
-    )
-
-    assert(solution == part2Solution)
-  }
+  validateExample[1]
+  validateExample[2]
