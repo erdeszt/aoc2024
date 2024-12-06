@@ -22,3 +22,9 @@ class Day4Test extends AnyFlatSpec:
 
     assert(solution == 18)
   }
+
+  "Day4, Part 2" should "produce the correct output for the example input" in {
+    val solution = summon[Solver[4, 2]].solve(day4Example)
+
+    assert(solution == 9)
+  }
