@@ -4,6 +4,10 @@ import scala.util.Using
 
 trait Solver[Day <: Int: ValueOf, Part <: Int: ValueOf]:
 
+  type Input
+
+  val parser: Parser[Input]
+
   /** Solves the `Part` of the solution for the `Day`
     *
     * @param input
@@ -11,18 +15,19 @@ trait Solver[Day <: Int: ValueOf, Part <: Int: ValueOf]:
     * @return
     *   The solution
     */
-  def solve(input: Vector[String]): Int
+  def solve(input: Input): Int
 
 object Solver:
 
   def solve[Day <: Int: ValueOf, Part <: Int: ValueOf](using
       solver: Solver[Day, Part],
   ): Unit =
-    val input = Using(
+    val rawInput = Using(
       scala.io.Source.fromResource(
         s"inputs/day${valueOf[Day]}.txt",
       ),
     )(_.getLines().toVector).get
+    val input = Parser.parse(solver.parser)(rawInput)
 
     val solution = solver.solve(input)
 

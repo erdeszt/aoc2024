@@ -1,17 +1,22 @@
 package advent
 
-def extractMulResults(input: String): Int =
-  val mulPattern = "mul\\((\\d+),(\\d+)\\)".r
+trait Day3Common:
+  type Input = Vector[String]
 
-  val matches = mulPattern.findAllMatchIn(input)
+  val parser: Parser[Vector[String]] = PBasic(RString())
 
-  matches.map(m => m.group(1).toInt * m.group(2).toInt).sum
+  def extractMulResults(input: String): Int =
+    val mulPattern = "mul\\((\\d+),(\\d+)\\)".r
 
-given day3part1Solution: Solver[3, 1] = new Solver[3, 1]:
+    val matches = mulPattern.findAllMatchIn(input)
+
+    matches.map(m => m.group(1).toInt * m.group(2).toInt).sum
+
+given day3part1Solution: Solver[3, 1] = new Solver[3, 1] with Day3Common:
   override def solve(input: Vector[String]): Int =
     input.map(extractMulResults).sum
 
-given day3part2Solution: Solver[3, 2] = new Solver[3, 2]:
+given day3part2Solution: Solver[3, 2] = new Solver[3, 2] with Day3Common:
   override def solve(input: Vector[String]): Int =
     input
       .foldLeft((0, true)) { case ((sum, isEnabled), line) =>

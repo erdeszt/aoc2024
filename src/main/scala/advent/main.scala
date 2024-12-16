@@ -2,4 +2,4 @@ package advent
 
 @main
 def main(): Unit =
-  Solver.solve[6, 1]
+  Solver.solve[5, 2]

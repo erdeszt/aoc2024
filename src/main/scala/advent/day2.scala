@@ -4,6 +4,11 @@ enum Order derives CanEqual:
   case Asc
   case Desc
 
+trait Day2Common:
+  type Input = Vector[Vector[Int]]
+
+  val parser: Parser[Input] = PBasic(RArray(Separator.Whitespace, VInt()))
+
 object Day2:
 
   def isSafe(line: Vector[Int]): Boolean =
@@ -41,22 +46,19 @@ object Day2:
       line.take(index) ++ line.drop(index + 1)
     }.toList
 
-given day2part1Solution: Solver[2, 1] = new Solver[2, 1]:
+given day2part1Solution: Solver[2, 1] = new Solver[2, 1] with Day2Common:
 
-  override def solve(input: Vector[String]): Int =
+  override def solve(input: Vector[Vector[Int]]): Int =
     input.foldLeft(0) { case (safe, line) =>
-      if Day2.isSafe(line.split("\\s+").map(_.toInt).toVector) then safe + 1
+      if Day2.isSafe(line) then safe + 1
       else safe
     }
 
-given day2part2Solution: Solver[2, 2] = new Solver[2, 2]:
+given day2part2Solution: Solver[2, 2] = new Solver[2, 2] with Day2Common:
 
-  override def solve(input: Vector[String]): Int =
+  override def solve(input: Vector[Vector[Int]]): Int =
     input.foldLeft(0) { case (safe, line) =>
-      val levels = line.split("\\s+").map(_.toInt).toVector
-      if (
-        Day2.isSafe(levels) || Day2.removeSingles(levels).exists(Day2.isSafe)
-      ) {
+      if (Day2.isSafe(line) || Day2.removeSingles(line).exists(Day2.isSafe)) {
         safe + 1
       } else { safe }
     }

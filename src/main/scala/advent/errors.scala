@@ -6,3 +6,6 @@ case class InvalidLineError(line: String, message: String = "")
           if message.nonEmpty then s"\n${message}" else ""
         }",
     )
+
+case class InvalidInputError(message: String)
+    extends Exception(s"Invalid input: ${message}")

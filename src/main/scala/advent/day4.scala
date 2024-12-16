@@ -1,6 +1,11 @@
 package advent
 
-given day4part1Solution: Solver[4, 1] = new Solver[4, 1]:
+trait Day4Common:
+  type Input = Vector[Vector[Char]]
+
+  val parser: Parser[Input] = PBasic(RChars())
+
+given day4part1Solution: Solver[4, 1] = new Solver[4, 1] with Day4Common:
 
   val directions = List(
     (-1, 0),
@@ -13,10 +18,11 @@ given day4part1Solution: Solver[4, 1] = new Solver[4, 1]:
     (1, 1),
   )
 
-  override def solve(input: Vector[String]): Int =
-    val matrix = input.map(_.toCharArray).toArray
+  override def solve(matrix: Vector[Vector[Char]]): Int =
     val height = matrix.length
     val width = matrix.head.length
+
+    println(matrix.map(_.mkString(",")).mkString("\n"))
 
     def isPositionValid(position: (Int, Int)): Boolean =
       val (row, col) = position
@@ -46,7 +52,7 @@ given day4part1Solution: Solver[4, 1] = new Solver[4, 1]:
       count + getXmasses(position).length
     }
 
-given day4Part2Solution: Solver[4, 2] = new Solver[4, 2]:
+given day4Part2Solution: Solver[4, 2] = new Solver[4, 2] with Day4Common:
 
   val positions = List(
     // Top Left to Bottom Right
@@ -55,8 +61,7 @@ given day4Part2Solution: Solver[4, 2] = new Solver[4, 2]:
     ((-1, 1), (1, -1)),
   )
 
-  override def solve(input: Vector[String]): Int =
-    val matrix = input.map(_.toCharArray).toArray
+  override def solve(matrix: Vector[Vector[Char]]): Int =
     val height = matrix.length
     val width = matrix.head.length
 
