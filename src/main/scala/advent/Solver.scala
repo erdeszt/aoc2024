@@ -29,8 +29,11 @@ object Solver:
     )(_.getLines().toVector).get
     val input = Parser.parse(solver.parser)(rawInput)
 
+    val startTime = System.nanoTime()
     val solution = solver.solve(input)
+    val endTime = System.nanoTime()
+    val took = (endTime - startTime).toDouble / 1000.0 / 1000.0
 
     println(
-      s"Solution to Day ${valueOf[Day]}, part ${valueOf[Part]}: ${solution}",
+      s"Solution to Day ${valueOf[Day]}, part ${valueOf[Part]}: ${solution}\n Runtime: ${took}ms",
     )
