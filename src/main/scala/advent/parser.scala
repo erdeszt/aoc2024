@@ -35,8 +35,8 @@ object RowPattern:
         row.split(separator.toSplitPattern) match
           case scala.Array(left, right) =>
             (
-              ValueParser.parse(leftParser)(left),
-              ValueParser.parse(rightParser)(right),
+              ValueParser.parse(leftParser)(left.trim()),
+              ValueParser.parse(rightParser)(right.trim()),
             )
           case _ => throw InvalidLineError(row)
       case RArray(separator, valueParser) =>
@@ -50,24 +50,30 @@ object RowPattern:
         row.toCharArray.toVector
 
 sealed trait ValueParser[T]
-case class VInt() extends ValueParser[Int]
+case class VNum() extends ValueParser[Long]
 case class VChar() extends ValueParser[Char]
+case class VArray[T](separator: Separator, elementParser: ValueParser[T])
+    extends ValueParser[Vector[T]]
 
 object ValueParser:
   def parse[T](parser: ValueParser[T])(raw: String): T =
     parser match
-      case VInt() => raw.toInt
+      case VNum() => raw.toLong
       case VChar() =>
         assert(raw.length == 1)
         raw(0)
+      case VArray(separator, elementParser) =>
+        raw.split(separator.toSplitPattern).toVector.map(parse(elementParser))
 
 enum Separator derives CanEqual:
   case Comma
   case Whitespace
   case Pipe
+  case Colon
 
   def toSplitPattern: String =
     this match
       case Comma      => ","
       case Whitespace => "\\s+"
       case Pipe       => "\\|"
+      case Colon      => ":"

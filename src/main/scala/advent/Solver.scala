@@ -15,7 +15,7 @@ trait Solver[Day <: Int: ValueOf, Part <: Int: ValueOf]:
     * @return
     *   The solution
     */
-  def solve(input: Input): Int
+  def solve(input: Input): Long
 
 object Solver:
 

@@ -5,15 +5,15 @@ enum Order derives CanEqual:
   case Desc
 
 trait Day2Common:
-  type Input = Vector[Vector[Int]]
+  type Input = Vector[Vector[Long]]
 
-  val parser: Parser[Input] = PBasic(RArray(Separator.Whitespace, VInt()))
+  val parser: Parser[Input] = PBasic(RArray(Separator.Whitespace, VNum()))
 
 object Day2:
 
-  def isSafe(line: Vector[Int]): Boolean =
+  def isSafe(line: Vector[Long]): Boolean =
     line
-      .foldLeft((Option.empty[Order], Option.empty[Int], true)) {
+      .foldLeft((Option.empty[Order], Option.empty[Long], true)) {
         case ((_, _, false), _)           => (None, None, false)
         case ((None, None, true), number) => (None, Some(number), true)
         case ((Some(_), None, _), _)      => (None, None, false)
@@ -41,14 +41,14 @@ object Day2:
       ._3
 
   // Slow solution
-  def removeSingles(line: Vector[Int]): List[Vector[Int]] =
+  def removeSingles(line: Vector[Long]): List[Vector[Long]] =
     line.indices.map { index =>
       line.take(index) ++ line.drop(index + 1)
     }.toList
 
 given day2part1Solution: Solver[2, 1] = new Solver[2, 1] with Day2Common:
 
-  override def solve(input: Vector[Vector[Int]]): Int =
+  override def solve(input: Vector[Vector[Long]]): Long =
     input.foldLeft(0) { case (safe, line) =>
       if Day2.isSafe(line) then safe + 1
       else safe
@@ -56,7 +56,7 @@ given day2part1Solution: Solver[2, 1] = new Solver[2, 1] with Day2Common:
 
 given day2part2Solution: Solver[2, 2] = new Solver[2, 2] with Day2Common:
 
-  override def solve(input: Vector[Vector[Int]]): Int =
+  override def solve(input: Vector[Vector[Long]]): Long =
     input.foldLeft(0) { case (safe, line) =>
       if (Day2.isSafe(line) || Day2.removeSingles(line).exists(Day2.isSafe)) {
         safe + 1

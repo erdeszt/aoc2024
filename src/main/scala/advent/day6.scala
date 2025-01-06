@@ -7,7 +7,7 @@ trait Day6Common:
 
   val parser: Parser[Input] = PBasic(RChars())
 
-  case class Pos(row: Int, col: Int)
+  case class Pos(row: Long, col: Long)
 
   enum Dir derives CanEqual:
     case Up
@@ -29,7 +29,7 @@ trait Day6Common:
       case Dir.Left  => pos.copy(col = pos.col - 1)
       case Dir.Right => pos.copy(col = pos.col + 1)
 
-  case class Run[T](value: T, runLength: Int) derives CanEqual
+  case class Run[T](value: T, runLength: Long) derives CanEqual
 
   enum Action derives CanEqual:
     case Move(dir: Dir)
@@ -56,7 +56,7 @@ trait Day6Common:
       ._1
 
 given day6part1Solution: Solver[6, 1] = new Solver[6, 1] with Day6Common:
-  override def solve(input: Vector[Vector[Char]]): Int =
+  override def solve(input: Vector[Vector[Char]]): Long =
     assert(input.nonEmpty)
 
     val startPos = input.zipWithIndex
@@ -73,14 +73,14 @@ given day6part1Solution: Solver[6, 1] = new Solver[6, 1] with Day6Common:
     var route = Vector.empty[Action]
 
     @tailrec
-    def go(currentPos: Pos, dir: Dir, visited: Set[Pos]): Int = {
+    def go(currentPos: Pos, dir: Dir, visited: Set[Pos]): Long = {
       val nextPos = getNextPos(currentPos, dir)
 
       if (
         nextPos.row < 0 || nextPos.row >= height || nextPos.col < 0 || nextPos.col >= width
       ) {
         visited.size
-      } else if (input(nextPos.row)(nextPos.col) == '#') {
+      } else if (input(nextPos.row.toInt)(nextPos.col.toInt) == '#') {
         route = route :+ Action.Turn(dir.turnRight)
         go(currentPos, dir.turnRight, visited)
       } else {
@@ -98,5 +98,5 @@ given day6part1Solution: Solver[6, 1] = new Solver[6, 1] with Day6Common:
     result
 
 given day6part2Solution: Solver[6, 2] = new Solver[6, 2] with Day6Common:
-  override def solve(input: Vector[Vector[Char]]): Int =
+  override def solve(input: Vector[Vector[Char]]): Long =
     ???

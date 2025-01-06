@@ -2,23 +2,23 @@ package advent
 
 trait Day5Common:
 
-  type Input = (Vector[(Int, Int)], Vector[Vector[Int]])
+  type Input = (Vector[(Long, Long)], Vector[Vector[Long]])
 
   val parser: Parser[Input] =
     PThen(
-      PBasic(RTuple(Separator.Pipe, VInt(), VInt())),
-      PBasic(RArray(Separator.Comma, VInt())),
+      PBasic(RTuple(Separator.Pipe, VNum(), VNum())),
+      PBasic(RArray(Separator.Comma, VNum())),
     )
 
-  def toMultiMap(rules: Vector[(Int, Int)]): Map[Int, Set[Int]] =
-    rules.foldLeft(Map.empty[Int, Set[Int]]) { case (map, (before, after)) =>
+  def toMultiMap(rules: Vector[(Long, Long)]): Map[Long, Set[Long]] =
+    rules.foldLeft(Map.empty[Long, Set[Long]]) { case (map, (before, after)) =>
       map.updatedWith(before) {
         case None      => Some(Set(after))
         case Some(set) => Some(set + after)
       }
     }
 
-  def isPageValid(page: Vector[Int], rules: Map[Int, Set[Int]]): Boolean =
+  def isPageValid(page: Vector[Long], rules: Map[Long, Set[Long]]): Boolean =
     var valid = true
 
     for (idx <- 1.until(page.length)) {
@@ -36,10 +36,12 @@ trait Day5Common:
 
 given day5part1Solution: Solver[5, 1] = new Solver[5, 1] with Day5Common:
 
-  override def solve(input: (Vector[(Int, Int)], Vector[Vector[Int]])): Int =
+  override def solve(
+      input: (Vector[(Long, Long)], Vector[Vector[Long]]),
+  ): Long =
     val rules = toMultiMap(input._1)
 
-    input._2.foldLeft(0) { case (sum, page) =>
+    input._2.foldLeft(0L) { case (sum, page) =>
       assert(page.length % 2 == 1)
 
       if isPageValid(page, rules) then sum + page((page.length - 1) / 2)
@@ -47,10 +49,12 @@ given day5part1Solution: Solver[5, 1] = new Solver[5, 1] with Day5Common:
     }
 
 given day5part2Solution: Solver[5, 2] = new Solver[5, 2] with Day5Common:
-  override def solve(input: (Vector[(Int, Int)], Vector[Vector[Int]])): Int =
+  override def solve(
+      input: (Vector[(Long, Long)], Vector[Vector[Long]]),
+  ): Long =
     val rules = toMultiMap(input._1)
 
-    input._2.foldLeft(0) { case (sum, page) =>
+    input._2.foldLeft(0L) { case (sum, page) =>
       assert(page.length % 2 == 1)
 
       if (isPageValid(page, rules)) {
