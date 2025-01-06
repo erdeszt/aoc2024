@@ -12,6 +12,7 @@ trait Day7Common:
   enum Op derives CanEqual:
     case Add
     case Mul
+    case Con
 
   enum Exp derives CanEqual:
     case BinOp(op: Op)
@@ -21,6 +22,7 @@ trait Day7Common:
     def format: Exp => String =
       case BinOp(Op.Add) => "+"
       case BinOp(Op.Mul) => "*"
+      case BinOp(Op.Con) => "||"
       case Num(value)    => value.toString
 
     def eval(exps: Vector[Exp]): Long =
@@ -30,16 +32,20 @@ trait Day7Common:
           case ((None, _), Num(value))             => (None, value)
           case ((Some(Op.Add), soFar), Num(value)) => (None, value + soFar)
           case ((Some(Op.Mul), soFar), Num(value)) => (None, value * soFar)
+          case ((Some(Op.Con), soFar), Num(value)) =>
+            (None, (soFar.toString + value.toString).toLong)
           case ((Some(_), _), BinOp(_)) =>
             assert(false, "Got BinOp, Num expected")
         }
         ._2
 
-  def patternToOps(pattern: Long, size: Long): Vector[Op] =
-    0L.until(size)
-      .map { idx =>
-        if (pattern & (1 << idx.toInt)) > 0 then Op.Add else Op.Mul
-      }
+  def allPerms[T](values: Vector[T], size: Long): Vector[Vector[T]] =
+    List
+      .fill(size.toInt)(values)
+      .flatten
+      .combinations(size.toInt)
+      .flatMap(_.permutations)
+      .map(_.toVector)
       .toVector
 
   def intersperseOps(parts: Vector[Long], ops: Vector[Op]): Vector[Exp] =
@@ -67,28 +73,35 @@ trait Day7Common:
 
     go(parts, ops, Vector.empty)
 
-  def createExpressions(parts: Vector[Long]): Vector[Vector[Exp]] =
+  def createExpressions(
+      parts: Vector[Long],
+      expressionSet: Vector[Op],
+  ): Vector[Vector[Exp]] =
     val size = parts.length
     val limit = Math.pow(2, size - 1).toInt
     assert(size > 0)
 
-    0.until(limit)
-      .map { pattern =>
-        intersperseOps(parts, patternToOps(pattern, size - 1))
-      }
-      .toVector
+    allPerms(expressionSet, parts.length - 1).map { ops =>
+      intersperseOps(parts, ops)
+    }
 
-given day7part1Solution: Solver[7, 1] = new Solver[7, 1] with Day7Common:
-
-  override def solve(input: Vector[(Long, Vector[Long])]): Long =
+  def solveFor(input: Input, expressionSet: Vector[Op]): Long =
     input.foldLeft(0L) { case (sum, (target, parts)) =>
-      if (createExpressions(parts).exists(exp => Exp.eval(exp) == target)) {
+      if (
+        createExpressions(parts, expressionSet)
+          .exists(exp => Exp.eval(exp) == target)
+      ) {
         sum + target
       } else {
         sum
       }
     }
 
+given day7part1Solution: Solver[7, 1] = new Solver[7, 1] with Day7Common:
+
+  override def solve(input: Vector[(Long, Vector[Long])]): Long =
+    solveFor(input, Vector(Op.Add, Op.Mul))
+
 given day7part2Solution: Solver[7, 2] = new Solver[7, 2] with Day7Common:
   override def solve(input: Vector[(Long, Vector[Long])]): Long =
-    ???
+    solveFor(input, Vector(Op.Add, Op.Mul, Op.Con))

@@ -3,7 +3,7 @@ package advent
 class Day7Test
     extends ExampleValidator[7](
       3749,
-      -1,
+      11387,
     )(
       """190: 10 19
         |3267: 81 40 27
