@@ -1,6 +1,8 @@
-package advent
+package advent.solutions
 
 import scala.annotation.tailrec
+
+import advent.*
 
 trait Day6Common:
   type Input = Vector[Vector[Char]]
@@ -92,8 +94,6 @@ given day6part1Solution: Solver[6, 1] = new Solver[6, 1] with Day6Common:
     val result = go(startPos, Dir.Up, Set(startPos))
 
     val routeRle = rle(route)
-
-    println(routeRle.mkString("\n"))
 
     result
 

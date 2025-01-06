@@ -1,4 +1,6 @@
-package advent
+package advent.solutions
+
+import advent.*
 
 class Day5Test
     extends ExampleValidator[5](

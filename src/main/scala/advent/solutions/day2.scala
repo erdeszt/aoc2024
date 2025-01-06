@@ -1,15 +1,15 @@
-package advent
+package advent.solutions
 
-enum Order derives CanEqual:
-  case Asc
-  case Desc
+import advent.*
 
 trait Day2Common:
   type Input = Vector[Vector[Long]]
 
   val parser: Parser[Input] = PBasic(RArray(Separator.Whitespace, VNum()))
 
-object Day2:
+  enum Order derives CanEqual:
+    case Asc
+    case Desc
 
   def isSafe(line: Vector[Long]): Boolean =
     line
@@ -50,7 +50,7 @@ given day2part1Solution: Solver[2, 1] = new Solver[2, 1] with Day2Common:
 
   override def solve(input: Vector[Vector[Long]]): Long =
     input.foldLeft(0) { case (safe, line) =>
-      if Day2.isSafe(line) then safe + 1
+      if isSafe(line) then safe + 1
       else safe
     }
 
@@ -58,7 +58,7 @@ given day2part2Solution: Solver[2, 2] = new Solver[2, 2] with Day2Common:
 
   override def solve(input: Vector[Vector[Long]]): Long =
     input.foldLeft(0) { case (safe, line) =>
-      if (Day2.isSafe(line) || Day2.removeSingles(line).exists(Day2.isSafe)) {
+      if (isSafe(line) || removeSingles(line).exists(isSafe)) {
         safe + 1
       } else { safe }
     }

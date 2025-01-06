@@ -1,4 +1,6 @@
-package advent
+package advent.solutions
+
+import advent.*
 
 trait Day4Common:
   type Input = Vector[Vector[Char]]
@@ -21,8 +23,6 @@ given day4part1Solution: Solver[4, 1] = new Solver[4, 1] with Day4Common:
   override def solve(matrix: Vector[Vector[Char]]): Long =
     val height = matrix.length
     val width = matrix.head.length
-
-    println(matrix.map(_.mkString(",")).mkString("\n"))
 
     def isPositionValid(position: (Long, Long)): Boolean =
       val (row, col) = position

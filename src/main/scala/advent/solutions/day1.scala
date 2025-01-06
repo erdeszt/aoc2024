@@ -1,4 +1,6 @@
-package advent
+package advent.solutions
+
+import advent.*
 
 trait Day1Common:
   type Input = Vector[(Long, Long)]

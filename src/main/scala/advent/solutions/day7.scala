@@ -1,6 +1,8 @@
-package advent
+package advent.solutions
 
 import scala.annotation.tailrec
+
+import advent.*
 
 trait Day7Common:
   type Input = Vector[(Long, Vector[Long])]
@@ -77,10 +79,6 @@ trait Day7Common:
       parts: Vector[Long],
       expressionSet: Vector[Op],
   ): Vector[Vector[Exp]] =
-    val size = parts.length
-    val limit = Math.pow(2, size - 1).toInt
-    assert(size > 0)
-
     allPerms(expressionSet, parts.length - 1).map { ops =>
       intersperseOps(parts, ops)
     }
