@@ -93,10 +93,9 @@ given day6part1Solution: Solver[6, 1] = new Solver[6, 1] with Day6Common:
 
     val result = go(startPos, Dir.Up, Set(startPos))
 
-    val routeRle = rle(route)
-
     result
 
 given day6part2Solution: Solver[6, 2] = new Solver[6, 2] with Day6Common:
   override def solve(input: Vector[Vector[Char]]): Long =
-    ???
+    // TODO: Finish implementation
+    -1

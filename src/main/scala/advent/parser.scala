@@ -2,6 +2,7 @@ package advent
 
 sealed trait Parser[T]
 case class PBasic[T](rowPattern: RowPattern[T]) extends Parser[Vector[T]]
+case class PSingle[T](rowPattern: RowPattern[T]) extends Parser[T]
 case class PThen[T, U](first: Parser[T], second: Parser[U])
     extends Parser[(T, U)]
 
@@ -9,6 +10,9 @@ object Parser:
   def parse[T](parser: Parser[T])(rows: Vector[String]): T =
     parser match
       case PBasic(rowPattern) => rows.map(RowPattern.parse(rowPattern))
+      case PSingle(rowPattern) =>
+        assert(rows.length == 1)
+        RowPattern.parse(rowPattern)(rows.head)
       case PThen(firstParser, secondParser) =>
         rows.splitAt(rows.indexWhere(_.isBlank)) match
           case (first, second) =>
