@@ -5,7 +5,7 @@ import advent.*
 class Day8Test
     extends ExampleValidator[8](
       14,
-      -1,
+      34,
     )(
       """............
         |........0...

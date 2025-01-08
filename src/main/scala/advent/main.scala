@@ -4,4 +4,4 @@ import advent.solutions.given
 
 @main
 def main(): Unit =
-  Solver.solve[7, 1]
+  Solver.solve[8, 1]

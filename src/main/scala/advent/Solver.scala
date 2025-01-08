@@ -35,5 +35,6 @@ object Solver:
     val took = (endTime - startTime).toDouble / 1000.0 / 1000.0
 
     println(
-      s"Solution to Day ${valueOf[Day]}, part ${valueOf[Part]}: ${solution}\n Runtime: ${took}ms",
+      s"Solution to Day ${valueOf[Day]}, part ${valueOf[Part]}: ${solution}",
     )
+    println(s"Runtime: ${took}ms")
